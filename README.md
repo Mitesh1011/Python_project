@@ -3,6 +3,14 @@ import numpy as np
 import mediapipe as mp
 from mediapipe.tasks import python
 from mediapipe.tasks.python import vision
+from picamera2 import Picamera2
+from libcamera import Transform
+
+picam2 = Picamera2()
+picam2.preview_configuration.size=(640,480)
+picam2.preview_configuration.format = "RGB888"
+picam2.preview_configuration.transform = Transform(hflip=1, vflip=0)
+picam2.start()
 
 # Constants
 MARGIN = 10  # pixels
@@ -41,7 +49,7 @@ def visualize(image, detection_result) -> np.ndarray:
 
 
 # Initialize camera
-cap = cv2.VideoCapture(0)
+cap = picamera2
 if not cap.isOpened():
     print("Error: Could not open camera.")
     exit()
