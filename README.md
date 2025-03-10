@@ -19,17 +19,17 @@ def visualize(image, detection_result) -> np.ndarray:
         start_x, start_y = bbox.origin_x, bbox.origin_y
         end_x, end_y = bbox.origin_x + bbox.width, bbox.origin_y + bbox.height
 
-        # Crop the detected object with margin
+  # Crop the detected object with margin
         cropped_img = image[max(0, start_y - MARGIN): min(image.shape[0], end_y + MARGIN),
                       max(0, start_x - MARGIN): min(image.shape[1], end_x + MARGIN)]
 
-        # Resize cropped image
+  # Resize cropped image
         cropped_img = cv2.resize(cropped_img, (300, 300))
 
-        # Draw bounding box only around detected object
+   # Draw bounding box only around detected object
         cv2.rectangle(image, (start_x, start_y), (end_x, end_y), TEXT_COLOR, 3)
 
-        # Draw label and score
+ # Draw label and score
         category = detection.categories[0]
         category_name = category.category_name
         probability = round(category.score, 2)
@@ -57,16 +57,16 @@ while True:
         print("Error: Could not read frame.")
         break
 
-    # Convert OpenCV image to MediaPipe format
+  # Convert OpenCV image to MediaPipe format
     mp_image = mp.Image(image_format=mp.ImageFormat.SRGB, data=frame)
 
-    # Detect objects in the frame
+ # Detect objects in the frame
     detection_result = detector.detect(mp_image)
 
-    # Process and visualize the detection result
+ # Process and visualize the detection result
     annotated_frame = visualize(frame, detection_result)
 
-    # Display the result
+  # Display the result
     cv2.imshow('Detected Objects', annotated_frame)
 
     if cv2.waitKey(1) & 0xFF == ord('q'):
