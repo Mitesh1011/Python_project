@@ -7,7 +7,7 @@ from picamera2 import Picamera2
 from libcamera import Transform
 
 picam2 = Picamera2()
-picam2.preview_configuration.size=(640,480)
+picam2.preview_configuration.size=(320,240)
 picam2.preview_configuration.format = "RGB888"
 picam2.preview_configuration.transform = Transform(hflip=1, vflip=0)
 picam2.start()
@@ -49,10 +49,10 @@ def visualize(image, detection_result) -> np.ndarray:
 
 
 # Initialize camera
-cap = picamera2
-if not cap.isOpened():
-    print("Error: Could not open camera.")
-    exit()
+#cap = picamera2
+#if not cap.isOpened():
+ ##   print("Error: Could not open camera.")
+   ## exit()
 
 # Create an ObjectDetector object
 base_options = python.BaseOptions(model_asset_path='model_fp16.tflite')
@@ -60,10 +60,11 @@ options = vision.ObjectDetectorOptions(base_options=base_options, score_threshol
 detector = vision.ObjectDetector.create_from_options(options)
 
 while True:
-    ret, frame = cap.read()
-    if not ret:
-        print("Error: Could not read frame.")
-        break
+  #  ret, frame = cap.read()
+   # if not ret:
+    #    print("Error: Could not read frame.")
+     #   break
+    frame = picam2.capture_array()
 
   # Convert OpenCV image to MediaPipe format
     mp_image = mp.Image(image_format=mp.ImageFormat.SRGB, data=frame)
@@ -80,5 +81,6 @@ while True:
     if cv2.waitKey(1) & 0xFF == ord('q'):
         break
 
-cap.release()
+#cap.release()
 cv2.destroyAllWindows()
+picam2.stop()
